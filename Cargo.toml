@@ -1,42 +1,22 @@
 [package]
 name = "mq2_pcf8563"
 version = "0.1.0"
-authors = ["bravetitan"]
 edition = "2021"
-license = "MIT OR Apache-2.0"
-description = "No-std driver for MQ-2 gas sensor (ADC) + PCF8563/HZ-8563 RTC (I²C) on AVR/Arduino Uno"
+license = "MIT"
+authors = ["bravetitan"]
+description = "No-std MQ-2 gas sensor logic + PCF8563 RTC support"
 repository = "https://github.com/bosunoyeleke/mq2-pcf8563"
 readme = "README.md"
-keywords = ["avr", "arduino", "embedded", "no-std", "i2c", "adc", "gas-sensor", "rtc", "mq2"]
-categories = ["embedded", "no-std", "hardware-support"]
 rust-version = "1.70"
 
 [dependencies]
-panic-halt = "1.0.0"
-ufmt = "0.2.0"
-nb = "1.1.0"
 embedded-hal = "1.0"
 pcf8563 = "0.2.1"
-libm = "0.2.15"
-
-[dependencies.arduino-hal]
-git = "https://github.com/rahix/avr-hal"
-rev = "e5c8f37fe48419956e722490a82b9ca9b9fc61a2"
-features = ["arduino-uno"]
-
-# Configure the build for minimal size - AVRs have very little program memory
-[profile.dev]
-panic = "abort"
-lto = true
-opt-level = "s"
+ufmt = "0.2"
+panic-halt = "0.2"
+libm = "0.2"
 
 [profile.release]
 panic = "abort"
-codegen-units = 1
-debug = true
 lto = true
 opt-level = "s"
-
-[[example]]
-name = "basic_logger"
-path = "examples/basic_logger.rs"
