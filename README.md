@@ -1,5 +1,4 @@
 ## mq2_pcf8563
-==============
 
 Rust crate for reading **MQ-2 gas sensor** (ADC) + **HZ-8563/PCF8563 RTC** (I²C) on **Arduino Uno** / AVR.
 
