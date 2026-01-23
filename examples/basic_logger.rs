@@ -1,3 +1,4 @@
+// examples/basic_logger.rs
 #![no_std]
 #![no_main]
 
@@ -12,7 +13,7 @@ use arduino_hal::{
     pins,
 };
 
-use gas_rtc_logger::{GasRtcLogger, GasRtcLoggerConfig};
+use mq2_pcf8563::{GasRtcLogger, GasRtcLoggerConfig};
 
 #[entry]
 fn main() -> ! {
@@ -31,18 +32,23 @@ fn main() -> ! {
         100_000,
     );
 
-    // Configure smoothing samples and alert threshold
     let config = GasRtcLoggerConfig {
         alert_threshold: 300,
         smoothing_samples: 8,
     };
 
-    let mut logger = GasRtcLogger::new(i2c, adc, mq2_pin, config);
+    let mut logger = GasRtcLogger::new(i2c, config);
 
+    // Calibrate once (in clean air) — prints to serial
     logger.calibrate_baseline(&mut serial);
 
     loop {
-        logger.log_data(&mut serial);
+        // Read raw ADC (external to library)
+        let raw = adc.read_blocking(&mut mq2_pin);
+
+        // Log using library method (passes raw)
+        logger.log(&mut serial, raw);
+
         delay_ms(2000);
     }
 }

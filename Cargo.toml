@@ -3,9 +3,8 @@ name = "mq2_pcf8563"
 version = "0.1.0"
 edition = "2021"
 license = "MIT"
-authors = ["bravetitan"]
 description = "No-std MQ-2 gas sensor logic + PCF8563 RTC support"
-repository = "https://github.com/bosunoyeleke/mq2-pcf8563"
+repository = "https://github.com/olatunbosunoyeleke94/mq2-pcf8563"
 readme = "README.md"
 rust-version = "1.70"
 

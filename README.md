@@ -1,5 +1,9 @@
 ## mq2_pcf8563
 
+[![crates.io](https://img.shields.io/crates/v/mq2_pcf8563.svg)](https://crates.io/crates/mq2_pcf8563)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE-APACHE)
+
 Rust crate for reading **MQ-2 gas sensor** (ADC) + **HZ-8563/PCF8563 RTC** (I²C) on **Arduino Uno** / AVR.
 
 Features:
@@ -14,6 +18,25 @@ Features:
 - HZ-8563/PCF8563: VCC → 5V, GND → GND, SDA → A4, SCL → A5
 - 4.7kΩ pull-up resistors on SDA and SCL to 5V (required for reliable I²C)
 
+## Installation
+
+```toml
+[dependencies]
+mq2_pcf8563 = "0.1.0"
+
+```
+
+## For development/testing with Arduino Uno, also add arduino-hal (git dep):
+
+```toml
+
+[dependencies.arduino-hal]
+git = "https://github.com/Rahix/avr-hal"
+rev = "e5c8f37fe48419956e722490a82b9ca9b9fc61a2"
+features = ["arduino-uno"]
+
+```
+
 ## Usage Example
 
 See the `examples/basic_logger.rs` for a complete runnable binary that:
@@ -23,6 +46,12 @@ See the `examples/basic_logger.rs` for a complete runnable binary that:
 
 ```bash
 cargo run --example basic_logger --release
+
+```
+
+The example uses arduino-hal (git-dependency) and
+is not part of the published crate on crates.io.
+Its for development and testing only.
 
 ## License
 Licensed under either of
