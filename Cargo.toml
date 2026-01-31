@@ -1,6 +1,6 @@
 [package]
 name = "mq2_pcf8563"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 license = "MIT"
 description = "No-std MQ-2 gas sensor logic + PCF8563 RTC support"
@@ -19,3 +19,12 @@ libm = "0.2"
 panic = "abort"
 lto = true
 opt-level = "s"
+
+[dependencies.arduino-hal]
+git = "https://github.com/Rahix/avr-hal"
+rev = "e5c8f37fe48419956e722490a82b9ca9b9fc61a2"
+features = ["arduino-uno"]
+
+[[example]]
+name = "basic_logger"
+path = "examples/basic_logger.rs"

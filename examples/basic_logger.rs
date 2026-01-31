@@ -14,6 +14,7 @@ use arduino_hal::{
 };
 
 use mq2_pcf8563::{GasRtcLogger, GasRtcLoggerConfig};
+use ufmt::uwriteln;
 
 #[entry]
 fn main() -> ! {
@@ -23,7 +24,7 @@ fn main() -> ! {
     let mut serial = default_serial!(dp, pins, 57600);
 
     let mut adc = Adc::new(dp.ADC, Default::default());
-    let mq2_pin = pins.a0.into_analog_input(&mut adc);
+    let mut mq2_pin = pins.a0.into_analog_input(&mut adc);
 
     let i2c = arduino_hal::I2c::new(
         dp.TWI,
@@ -39,16 +40,35 @@ fn main() -> ! {
 
     let mut logger = GasRtcLogger::new(i2c, config);
 
-    // Calibrate once (in clean air) — prints to serial
-    logger.calibrate_baseline(&mut serial);
+    // Set RTC time
+    let dt = pcf8563::DateTime {
+        year: 26,
+        month: 1,
+        day: 31,
+        weekday: 5,
+        hours: 14,
+        minutes: 52,
+        seconds: 0,
+    };
+
+    let _ = logger.set_datetime(&dt);
+
+    // Baseline calibration
+    let _ = uwriteln!(&mut serial, "Measuring baseline in clean air...");
+    delay_ms(10_000);
+
+    let mut sum: u32 = 0;
+    for _ in 0..20 {
+        sum += adc.read_blocking(&mut mq2_pin) as u32;
+        delay_ms(500);
+    }
+    let baseline = (sum / 20) as u16;
+    let _ = uwriteln!(&mut serial, "Baseline raw: {}", baseline);
+    logger.set_baseline(baseline);
 
     loop {
-        // Read raw ADC (external to library)
         let raw = adc.read_blocking(&mut mq2_pin);
-
-        // Log using library method (passes raw)
         logger.log(&mut serial, raw);
-
         delay_ms(2000);
     }
 }
